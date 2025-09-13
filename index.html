@@ -5,59 +5,87 @@
   <title>注文番号表示</title>
   <style>
     body {
-      background: white;   /* 背景を白 */
-      color: black;        /* 文字を黒 */
+      background: white;
+      color: black;
       font-family: sans-serif;
       margin: 0;
       padding: 2em;
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      flex-direction: column;
       height: 100vh;
+      box-sizing: border-box;
     }
+
     .container {
       display: flex;
-      width: 90%;
-      max-width: 1200px;
-      height: 100%; /* ← ページ全体に広げる */
+      flex: 1;
+      width: 100%;
     }
+
     .column {
       flex: 1;
       padding: 0.5em 1em;
-      font-size: 2em;
-      text-align: left;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .header {
+      width: 100%;
+      padding: 0.5em;
+      font-size: 1.3em;
+      font-weight: bold;
+      color: white;
+    }
+
+    .header.waiting {
+      background: #999; /* 灰色 */
+    }
+    .header.calling {
+      background: #4CAF50; /* 緑色 */
+    }
+
+    .numbers.waiting {
+      font-size: 2em;       /* 少し小さめ */
+      font-weight: bold;
+      margin-top: 0.5em;
       white-space: pre-line;
     }
-    .divider {
-      width: 2px;
-      background: black; /* 区切り線も黒 */
-      margin: 0 1em;
-      height: 100%;
-      align-self: stretch;
+
+    .numbers.calling {
+      font-size: 3.5em;     /* 大きめ */
+      font-weight: 900;     /* 太め */
+      margin-top: 0.5em;
+      white-space: pre-line;
     }
-    .heading {
-      font-size: 1.5em;
-      margin-bottom: 0.5em;
-      font-weight: bold;
-    }
-    .numbers {
-      font-weight: bold;
-      font-size: 3em; /* ← 数字を大きく */
-      line-height: 1.2;
+
+    .footer {
+      text-align: center;
+      font-size: 1.2em;
+      padding: 1em 0;
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- 左: お待ち番号 -->
     <div class="column">
-      <div class="heading">準備中番号</div>
-      <div id="preparing" class="numbers"></div>
+      <div class="header waiting">お待ち番号</div>
+      <div id="preparing" class="numbers waiting"></div>
     </div>
-    <div class="divider"></div>
+
+    <!-- 真ん中: お呼び出し中番号 -->
     <div class="column">
-      <div class="heading">呼び出し中番号</div>
-      <div id="calling" class="numbers"></div>
+      <div class="header calling">お呼び出し中の番号</div>
+      <div id="calling" class="numbers calling"></div>
     </div>
+
+    <!-- 右: 空白領域 -->
+    <div class="column"></div>
+  </div>
+
+  <div class="footer">
+    お手元のシート番号をご参照ください
   </div>
 
   <script>

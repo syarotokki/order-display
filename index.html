@@ -49,27 +49,23 @@
       background: #4CAF50; /* 緑色 */
     }
 
+    /* お待ち番号 → 2倍 */
     .numbers.waiting {
       color: #555;
-      font-size: 1.4em;
+      font-size: 2.8em;   /* 2倍に拡大 */
       font-weight: 700;
       margin-top: 0.3em;
       white-space: pre-line;
     }
 
+    /* 呼び出し番号 → 3倍 */
     .numbers.calling {
       color: #4CAF50;
       font-weight: 700;
       margin-top: 0.3em;
       white-space: pre-line;
       text-align: left;
-    }
-    /* 呼び出し中の番号サイズ調整 */
-    .numbers.calling.single {
-      font-size: 3em;   /* 1件 → 大きめ */
-    }
-    .numbers.calling.multi {
-      font-size: 2em;   /* 複数件 → 少し小さめで縦並び */
+      font-size: 4.8em;   /* 3倍に拡大 */
     }
 
     .footer {
@@ -112,18 +108,9 @@
         document.getElementById('preparing').textContent =
           data.preparing.length ? data.preparing.join('\n') : '';
 
-        // 呼び出し中番号
-        const callingEl = document.getElementById('calling');
-        callingEl.textContent = data.calling.length ? data.calling.join('\n') : '';
-
-        // 件数に応じてクラス切り替え
-        if (data.calling.length <= 1) {
-          callingEl.classList.add("single");
-          callingEl.classList.remove("multi");
-        } else {
-          callingEl.classList.add("multi");
-          callingEl.classList.remove("single");
-        }
+        // 呼び出し番号
+        document.getElementById('calling').textContent =
+          data.calling.length ? data.calling.join('\n') : '';
 
       } catch (e) {
         console.error("更新失敗:", e);

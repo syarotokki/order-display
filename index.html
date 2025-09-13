@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>注文番号表示</title>
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 2em;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+    }
+    .container {
+      display: flex;
+      width: 90%;
+      max-width: 1200px;
+      height: 100%; /* ← ページ全体に広げる */
+    }
+    .column {
+      flex: 1;
+      padding: 0.5em 1em;
+      font-size: 2em;
+      text-align: left;
+      white-space: pre-line;
+    }
+    .divider {
+      width: 2px;
+      background: white;
+      margin: 0 1em;
+      /* ページの高さに伸ばす */
+      height: 100%;
+      align-self: stretch;
+    }
+    .heading {
+      font-size: 1.2em;
+      margin-bottom: 0.5em;
+    }
+    .numbers {
+      font-weight: bold;
+      font-size: 1.5em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="column">
+      <div class="heading">準備中番号</div>
+      <div id="preparing" class="numbers">なし</div>
+    </div>
+    <div class="divider"></div>
+    <div class="column">
+      <div class="heading">呼び出し中番号</div>
+      <div id="calling" class="numbers">なし</div>
+    </div>
+  </div>
+
+  <script>
+    async function update() {
+      try {
+        const res = await fetch('/orders.json?_=' + Date.now());
+        const data = await res.json();
+        document.getElementById('preparing').textContent =
+          data.preparing.length ? data.preparing.join('\n') : 'なし';
+        document.getElementById('calling').textContent =
+          data.calling.length ? data.calling.join('\n') : 'なし';
+      } catch (e) {
+        console.error("更新失敗:", e);
+      }
+    }
+    update();
+    setInterval(update, 2000);
+  </script>
+</body>
+</html>

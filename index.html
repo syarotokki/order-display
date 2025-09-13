@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>注文番号表示</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
       background: white;
       color: black;
-      font-family: sans-serif;
+      font-family: 'Roboto Condensed', sans-serif;
       margin: 0;
       padding: 2em;
       display: flex;
@@ -32,10 +33,11 @@
 
     .header {
       width: 100%;
-      padding: 0.5em;
-      font-size: 1.3em;
-      font-weight: bold;
+      padding: 1em;
+      font-size: 3em;
+      font-weight: 700;
       color: white;
+      box-sizing: border-box;
     }
 
     .header.waiting {
@@ -45,24 +47,34 @@
       background: #4CAF50; /* 緑色 */
     }
 
+    /* お待ち番号2列用 */
+    .wait-container {
+      display: flex;
+      width: 100%;
+      gap: 2em; /* 列間スペース */
+    }
     .numbers.waiting {
-      font-size: 2em;       /* 少し小さめ */
-      font-weight: bold;
+      flex: 1;
+      color: #666;
+      font-size: 1.4em;
+      font-weight: 700;
       margin-top: 0.5em;
       white-space: pre-line;
     }
 
     .numbers.calling {
-      font-size: 3.5em;     /* 大きめ */
-      font-weight: 900;     /* 太め */
+      color: #4CAF50;
+      font-size: 2em;
+      font-weight: 700;
       margin-top: 0.5em;
       white-space: pre-line;
     }
 
     .footer {
       text-align: center;
-      font-size: 1.2em;
+      font-size: 3.6em;
       padding: 1em 0;
+      font-weight: 700;
     }
   </style>
 </head>
@@ -71,7 +83,10 @@
     <!-- 左: お待ち番号 -->
     <div class="column">
       <div class="header waiting">お待ち番号</div>
-      <div id="preparing" class="numbers waiting"></div>
+      <div class="wait-container">
+        <div id="preparing-left" class="numbers waiting"></div>
+        <div id="preparing-right" class="numbers waiting"></div>
+      </div>
     </div>
 
     <!-- 真ん中: お呼び出し中番号 -->
@@ -93,10 +108,27 @@
       try {
         const res = await fetch('/orders.json?_=' + Date.now());
         const data = await res.json();
-        document.getElementById('preparing').textContent =
-          data.preparing.length ? data.preparing.join('\n') : '';
+
+        // お待ち番号を左右に振り分け
+        let left = [];
+        let right = [];
+        data.preparing.forEach((num, i) => {
+          if (i % 2 === 0) {
+            left.push(num);
+          } else {
+            right.push(num);
+          }
+        });
+
+        document.getElementById('preparing-left').textContent =
+          left.length ? left.join('\n') : '';
+        document.getElementById('preparing-right').textContent =
+          right.length ? right.join('\n') : '';
+
+        // 呼び出し中番号
         document.getElementById('calling').textContent =
           data.calling.length ? data.calling.join('\n') : '';
+
       } catch (e) {
         console.error("更新失敗:", e);
       }

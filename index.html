@@ -5,8 +5,8 @@
   <title>注文番号表示</title>
   <style>
     body {
-      background: black;
-      color: white;
+      background: white;   /* 背景を白 */
+      color: black;        /* 文字を黒 */
       font-family: sans-serif;
       margin: 0;
       padding: 2em;
@@ -30,19 +30,20 @@
     }
     .divider {
       width: 2px;
-      background: white;
+      background: black; /* 区切り線も黒 */
       margin: 0 1em;
-      /* ページの高さに伸ばす */
       height: 100%;
       align-self: stretch;
     }
     .heading {
-      font-size: 1.2em;
+      font-size: 1.5em;
       margin-bottom: 0.5em;
+      font-weight: bold;
     }
     .numbers {
       font-weight: bold;
-      font-size: 1.5em;
+      font-size: 3em; /* ← 数字を大きく */
+      line-height: 1.2;
     }
   </style>
 </head>
@@ -50,12 +51,12 @@
   <div class="container">
     <div class="column">
       <div class="heading">準備中番号</div>
-      <div id="preparing" class="numbers">なし</div>
+      <div id="preparing" class="numbers"></div>
     </div>
     <div class="divider"></div>
     <div class="column">
       <div class="heading">呼び出し中番号</div>
-      <div id="calling" class="numbers">なし</div>
+      <div id="calling" class="numbers"></div>
     </div>
   </div>
 
@@ -65,9 +66,9 @@
         const res = await fetch('/orders.json?_=' + Date.now());
         const data = await res.json();
         document.getElementById('preparing').textContent =
-          data.preparing.length ? data.preparing.join('\n') : 'なし';
+          data.preparing.length ? data.preparing.join('\n') : '';
         document.getElementById('calling').textContent =
-          data.calling.length ? data.calling.join('\n') : 'なし';
+          data.calling.length ? data.calling.join('\n') : '';
       } catch (e) {
         console.error("更新失敗:", e);
       }

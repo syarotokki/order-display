@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>注文番号表示</title>
+  <!-- Roboto Condensed Bold -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -42,37 +43,39 @@
     }
 
     .header.waiting {
-      background: #777;
+      background: #777; /* 灰色 */
     }
     .header.calling {
-      background: #4CAF50;
+      background: #4CAF50; /* 緑色 */
     }
 
-    /* お待ち番号 → 縦並び2行まで */
+    /* 共通の番号レイアウト */
+    .numbers {
+      display: flex;
+      flex-wrap: wrap;              /* 横並び＋折り返し */
+      align-content: flex-start;    /* 上から順に敷き詰め */
+      gap: 0.2em 0.6em;             /* 行間・列間の余白 */
+      overflow: hidden;             /* はみ出しは隠す */
+      line-height: 1.2;
+      box-sizing: border-box;
+      flex: 1;                      /* 高さを占有 */
+      max-height: calc(100% - 3em); /* フッターと被らない */
+    }
+
     .numbers.waiting {
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      max-height: calc(2 * 1.2em * 2); /* 2行制限 */
-      overflow: hidden;
       color: #555;
-      font-size: 2.8em;
+      font-size: 2.8em;   /* 2倍 */
       font-weight: 700;
-      margin-top: 0.3em;
     }
 
-    /* 呼び出し番号 → 横に敷き詰め2行まで */
     .numbers.calling {
-      display: flex;
-      flex-wrap: wrap;
-      align-content: flex-start;
-      max-height: calc(2 * 1.2em * 4.8em); /* 2行分だけ表示 */
-      overflow: hidden;
       color: #4CAF50;
+      font-size: 4.8em;   /* 3倍 */
       font-weight: 700;
-      margin-top: 0.3em;
-      font-size: 4.8em;
-      gap: 0.5em;
+    }
+
+    .numbers span {
+      display: inline-block;
     }
 
     .footer {
@@ -111,22 +114,22 @@
         const res = await fetch('/orders.json?_=' + Date.now());
         const data = await res.json();
 
-        // お待ち番号（縦に並べる）
-        const prepDiv = document.getElementById('preparing');
-        prepDiv.innerHTML = '';
-        data.preparing.forEach(num => {
-          const div = document.createElement('div');
-          div.textContent = num;
-          prepDiv.appendChild(div);
+        // お待ち番号 → span に敷き詰め
+        const prepEl = document.getElementById('preparing');
+        prepEl.innerHTML = "";
+        (data.preparing || []).forEach(num => {
+          const span = document.createElement("span");
+          span.textContent = num;
+          prepEl.appendChild(span);
         });
 
-        // 呼び出し番号（横に敷き詰める）
-        const callDiv = document.getElementById('calling');
-        callDiv.innerHTML = '';
-        data.calling.forEach(num => {
-          const div = document.createElement('div');
-          div.textContent = num;
-          callDiv.appendChild(div);
+        // 呼び出し番号 → span に敷き詰め
+        const callingEl = document.getElementById('calling');
+        callingEl.innerHTML = "";
+        (data.calling || []).forEach(num => {
+          const span = document.createElement("span");
+          span.textContent = num;
+          callingEl.appendChild(span);
         });
 
       } catch (e) {

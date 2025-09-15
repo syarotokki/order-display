@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>注文番号表示</title>
-  <!-- Roboto Condensed Bold -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -43,29 +42,37 @@
     }
 
     .header.waiting {
-      background: #777; /* 灰色 */
+      background: #777;
     }
     .header.calling {
-      background: #4CAF50; /* 緑色 */
+      background: #4CAF50;
     }
 
-    /* お待ち番号 → 2倍 */
+    /* お待ち番号 → 縦並び2行まで */
     .numbers.waiting {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      max-height: calc(2 * 1.2em * 2); /* 2行制限 */
+      overflow: hidden;
       color: #555;
-      font-size: 2.8em;   /* 2倍に拡大 */
+      font-size: 2.8em;
       font-weight: 700;
       margin-top: 0.3em;
-      white-space: pre-line;
     }
 
-    /* 呼び出し番号 → 3倍 */
+    /* 呼び出し番号 → 横に敷き詰め2行まで */
     .numbers.calling {
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      max-height: calc(2 * 1.2em * 4.8em); /* 2行分だけ表示 */
+      overflow: hidden;
       color: #4CAF50;
       font-weight: 700;
       margin-top: 0.3em;
-      white-space: pre-line;
-      text-align: left;
-      font-size: 4.8em;   /* 3倍に拡大 */
+      font-size: 4.8em;
+      gap: 0.5em;
     }
 
     .footer {
@@ -104,13 +111,23 @@
         const res = await fetch('/orders.json?_=' + Date.now());
         const data = await res.json();
 
-        // お待ち番号
-        document.getElementById('preparing').textContent =
-          data.preparing.length ? data.preparing.join('\n') : '';
+        // お待ち番号（縦に並べる）
+        const prepDiv = document.getElementById('preparing');
+        prepDiv.innerHTML = '';
+        data.preparing.forEach(num => {
+          const div = document.createElement('div');
+          div.textContent = num;
+          prepDiv.appendChild(div);
+        });
 
-        // 呼び出し番号
-        document.getElementById('calling').textContent =
-          data.calling.length ? data.calling.join('\n') : '';
+        // 呼び出し番号（横に敷き詰める）
+        const callDiv = document.getElementById('calling');
+        callDiv.innerHTML = '';
+        data.calling.forEach(num => {
+          const div = document.createElement('div');
+          div.textContent = num;
+          callDiv.appendChild(div);
+        });
 
       } catch (e) {
         console.error("更新失敗:", e);
